@@ -1,0 +1,461 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BANGGO HUNTER</title>
+    
+    <link rel="stylesheet" href="css/tailwind-offline.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div id="customSplashScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; z-index: 9999; display: flex; justify-content: center; align-items: center;">
+        <img src="assets/images/ui/splash_screen_logo.png" alt="Splash Logo" class="splash-logo-anim" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+    </div>
+
+    <div id="loadingScreen">
+        <div id="loadingGroup" class="loading-content">
+            <div data-i18n="loading" class="text-white text-2xl font-bold tracking-widest mb-2">MEMUAT DATA</div>
+            <div class="loading-bar-container">
+                <div id="loadingBarFill" class="loading-bar-fill"></div>
+            </div>
+        </div>
+        
+        <div id="startGroup" class="scaled-group hidden">
+            <div class="touch-start-btn" onclick="startExperience()">
+                <div data-i18n="touchToStart" class="ts-title whitespace-pre-wrap">SENTUH<br>UNTUK MULAI</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="splashOverlay"></div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <video id="comboVideo" src="assets/video/combo_vfx.mp4" loop muted playsinline style="display:none;"></video>
+
+    <div id="topNotifContainer" class="absolute top-4 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 z-[9999] pointer-events-none"></div>
+
+    <div id="titleLayer" class="absolute top-0 left-0 w-full h-full z-50 overflow-hidden hidden">
+        <img id="titleBgTree" class="title-bg-tree pointer-events-none" src="" alt="Tree BG">
+        
+        <div class="scaled-group pointer-events-none">
+            <div id="uiLeftWrapper" class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-0">
+                <img id="titleChar" class="title-character pointer-events-auto" src="" alt="Character">
+            </div>
+            
+            <div id="uiRightWrapper" class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-0">
+                <img id="titleLogo" class="title-logo pointer-events-auto" src="" alt="Banggo Hunter Logo">
+                <div class="mode-container pointer-events-auto">
+                    <button id="btn-classic" class="mode-btn active" data-i18n="classic" onclick="setGameMode('classic')">CLASSIC</button>
+                    <button id="btn-rank" class="mode-btn" data-i18n="rank" onclick="setGameMode('rank')">RANK</button>
+                </div>
+                <button id="btn-play-title" class="play-btn-main play-btn-blue pointer-events-auto" data-i18n="play" onclick="playGameTransition()">PLAY</button>
+            </div>
+
+            <div id="uiTopWrapper" class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-0">
+                <div class="absolute top-10 right-10 flex flex-col items-end gap-4 z-20 pointer-events-auto">
+                    <div class="glass-panel px-6 py-3 rounded-2xl border-4 border-yellow-400 flex items-center gap-3 w-[220px] justify-between bg-black/70 shadow-[0_0_15px_rgba(250,204,21,0.5)]">
+                        <span class="text-3xl">🪙</span>
+                        <span id="uiBanggoCoin" class="text-yellow-400 font-black text-3xl">0</span>
+                    </div>
+                    <div class="glass-panel px-6 py-3 rounded-2xl border-4 border-orange-400 flex items-center gap-3 w-[220px] justify-between bg-black/70 shadow-[0_0_15px_rgba(251,146,60,0.5)]">
+                        <img id="uiFeatherIcon" src="" class="w-8 h-8 object-contain drop-shadow-md">
+                        <span id="uiBanggoFeather" class="text-orange-400 font-black text-3xl">0</span>
+                    </div>
+                </div>
+
+                <div class="absolute top-10 left-10 flex flex-col gap-6 z-20 items-start pointer-events-auto">
+                    <div class="flex flex-row gap-5 items-center">
+                        <div class="flex flex-row items-center">
+                            <input type="file" id="photoUpload" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)">
+                            <div id="profilePhotoBtn" class="w-[90px] h-[90px] rounded-[1.25rem] border-[4px] border-[#0ea5e9] bg-black/70 cursor-pointer overflow-hidden flex items-center justify-center shadow-[0_0_15px_rgba(14,165,233,0.5)] transition-all hover:brightness-110 active:brightness-90 z-10 relative" onclick="document.getElementById('photoUpload').click()" title="Ubah Foto Profil">
+                                <img id="profilePhotoImg" src="" class="w-full h-full object-cover hidden">
+                                <span id="profilePhotoPlaceholder" class="text-4xl drop-shadow-md">📷</span>
+                            </div>
+                            <input type="text" id="mainPlayerName" class="name-input-field w-[200px] h-[64px] border-[4px] border-l-0 border-[#0ea5e9] rounded-r-2xl -ml-5 pl-8 pr-2 z-0 relative shadow-[0_0_15px_rgba(14,165,233,0.3)] bg-[#f1f5f9]" maxlength="12" placeholder="NAMA HUNTER" value="HUNTER">
+                        </div>
+                        <div class="h-[90px] px-8 rounded-3xl border-[4px] border-yellow-400 bg-black/70 flex items-center justify-center shadow-[0_0_15px_rgba(250,204,21,0.5)] shrink-0" title="Skor Tertinggi Mode Rank">
+                            <span class="text-yellow-400 font-black text-4xl drop-shadow-md tracking-wider">🏆 <span id="uiBestScore">0</span></span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-6 items-start">
+                        <button id="btn-setting" class="transition-transform hover:scale-105 active:scale-95 flex items-center justify-center w-[64px] h-[64px]" onclick="handleBtnAction('btn-setting', showSetting)">
+                            <img id="imgBtnSetting" src="" alt="Setting" class="w-full h-full object-contain drop-shadow-lg">
+                        </button>
+                        <button id="btn-exit" class="transition-transform hover:scale-105 active:scale-95 flex items-center justify-center w-[64px] h-[64px]" onclick="handleBtnAction('btn-exit', confirmExitApp)">
+                            <img id="imgBtnExit" src="" alt="Exit" class="w-full h-full object-contain drop-shadow-lg">
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="uiBottomWrapper" class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-0">
+                <div class="absolute bottom-10 left-10 flex gap-4 z-20 pointer-events-auto">
+                    <button id="btn-lb" class="btn-green-small" data-i18n="lb" onclick="handleBtnAction('btn-lb', showLeaderboard)">LEADERBOARD</button>
+                    <button id="btn-login" class="btn-green-small" data-i18n="daily" onclick="handleBtnAction('btn-login', showDailyLogin)">DAILY REWARD</button>
+                    <button id="btn-gacha" class="btn-green-small" data-i18n="draw" onclick="handleBtnAction('btn-gacha', showGacha)">DRAW</button>
+                    <button id="btn-hunter" class="btn-green-small" data-i18n="hunter" onclick="handleBtnAction('btn-hunter', showCharacterScreen)">HUNTER</button>
+                </div>
+                <img id="studioLogo" class="studio-logo pointer-events-auto" src="" alt="Studio Logo">
+            </div>
+        </div>
+    </div>
+
+    <div id="gameplaySelectionLayer" class="screen-overlay hidden z-[60] !bg-transparent !backdrop-blur-none">
+        <img id="imgGameplayBg" src="" class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none">
+        <div class="scaled-group z-10">
+            <div class="modal-content relative flex items-center justify-center flex-col gap-10">
+                <h2 id="gsTitle" class="text-6xl font-black text-white drop-shadow-md tracking-widest uppercase italic mb-4">MODE</h2>
+                <div id="gsIconsContainer" class="flex gap-10 min-h-[350px] items-center justify-center"></div>
+                <div id="gsDesc" class="text-3xl font-medium text-white drop-shadow-md text-center w-[1000px] h-[120px] whitespace-pre-wrap leading-relaxed mt-4">Pilih jenis gameplay untuk memulai.</div>
+                <div id="gsBtnContainer" class="flex gap-8 w-[800px] justify-center mt-6">
+                    <button id="btnGsCancel" onclick="cancelGameplaySelection()" data-i18n="cancelBtn" class="btn-green-small flex-1 max-w-[350px] !text-4xl !py-6 !bg-gradient-to-b !from-red-500 !to-red-700 !shadow-[0_8px_0_#991b1b]">BATAL</button>
+                    <button id="btnGsStart" onclick="startGameplayNow()" data-i18n="startBtn" class="btn-green-small flex-1 max-w-[350px] !text-4xl !py-6 opacity-50 cursor-not-allowed pointer-events-none transition-all">START</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="disconnectLayer" class="screen-overlay hidden z-[100]">
+        <div class="scaled-group">
+            <div class="modal-content relative flex items-center justify-center">
+                <div class="relative w-[1000px] h-[600px] flex justify-center items-center">
+                    <img id="imgDisconnectBg" src="" class="absolute inset-0 w-full h-full object-fill pointer-events-none drop-shadow-2xl">
+                    <div class="absolute inset-0 pointer-events-auto flex flex-col items-center justify-center gap-10 p-12 text-center">
+                        <span class="text-7xl mb-4">📡</span>
+                        <h2 data-i18n="connLost" class="text-4xl font-black text-red-400 drop-shadow-md uppercase tracking-wider whitespace-pre-wrap leading-snug">SINYAL HILANG, SAYANG!\nMenunggu koneksi...</h2>
+                        <div class="flex gap-8 w-full px-12 mt-6">
+                            <button onclick="surrenderRank()" data-i18n="surrender" class="btn-green-small flex-1 !text-3xl !py-5 !bg-gradient-to-b !from-red-500 !to-red-700 !shadow-[0_8px_0_#991b1b]">MENYERAH</button>
+                            <button onclick="checkConnectionToResume()" data-i18n="waitSig" class="btn-green-small flex-1 !text-3xl !py-5 !bg-gradient-to-b !from-blue-500 !to-blue-700 !shadow-[0_8px_0_#1e3a8a]">TUNGGU SINYAL</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="exitLayer" class="screen-overlay hidden z-[100]">
+        <div class="scaled-group">
+            <div class="modal-content relative flex items-center justify-center">
+                <div class="relative w-[900px] h-[525px] flex justify-center items-center">
+                    <img id="imgExitBg" src="" class="absolute inset-0 w-full h-full object-fill pointer-events-none drop-shadow-2xl">
+                    <div class="absolute inset-0 pointer-events-auto flex flex-col items-center justify-center gap-10 p-12">
+                        <h2 data-i18n="exitConfirm" class="text-5xl font-black text-white text-center drop-shadow-md">KELUAR DARI GAME?</h2>
+                        <div class="flex gap-8 w-full px-12">
+                            <button onclick="exitApp()" data-i18n="yes" class="btn-green-small flex-1 !text-3xl !py-5 !bg-gradient-to-b !from-red-500 !to-red-700 !shadow-[0_8px_0_#991b1b]">YA</button>
+                            <button onclick="cancelExit()" data-i18n="no" class="btn-green-small flex-1 !text-3xl !py-5 !shadow-[0_8px_0_#15803d]">TIDAK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="photoConfirmLayer" class="screen-overlay hidden z-[100]">
+        <div class="scaled-group">
+            <div class="modal-content relative flex items-center justify-center">
+                <div class="relative w-[900px] h-[650px] flex justify-center items-center">
+                    <img id="imgPhotoConfirmBg" src="" class="absolute inset-0 w-full h-full object-fill pointer-events-none drop-shadow-2xl">
+                    <div class="absolute inset-0 pointer-events-auto flex flex-col items-center justify-center gap-8 p-12">
+                        <h2 data-i18n="savePhotoConfirm" class="text-4xl font-black text-yellow-400 text-center drop-shadow-md uppercase tracking-widest">SIMPAN FOTO INI?</h2>
+                        <div class="w-[200px] h-[200px] rounded-3xl border-8 border-yellow-400 bg-black/70 overflow-hidden shadow-[0_0_20px_rgba(250,204,21,0.6)]">
+                            <img id="photoConfirmPreview" src="" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex gap-8 w-full px-12 mt-4">
+                            <button onclick="cancelPhoto()" data-i18n="cancelBtn" class="btn-green-small flex-1 !text-3xl !py-5 !bg-gradient-to-b !from-red-500 !to-red-700 !shadow-[0_8px_0_#991b1b]">BATAL</button>
+                            <button onclick="confirmPhoto()" data-i18n="saveBtn" class="btn-green-small flex-1 !text-3xl !py-5 !bg-gradient-to-b !from-blue-500 !to-blue-700 !shadow-[0_8px_0_#1e3a8a]">SIMPAN</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="settingLayer" class="screen-overlay hidden z-[60]">
+        <div class="scaled-group">
+            <div class="modal-content relative flex items-center justify-center">
+                <div class="relative w-[1000px] h-[750px] flex justify-center items-center">
+                    <img id="imgSettingBg" src="" class="absolute inset-0 w-full h-full object-fill pointer-events-none drop-shadow-2xl">
+                    <button onclick="hideSetting()" class="absolute top-[40px] left-[40px] z-[100] transition transform hover:scale-105 active:scale-95 pointer-events-auto">
+                        <img id="imgSettingClose" src="" class="w-20 h-20 drop-shadow-lg">
+                    </button>
+                    
+                    <div class="absolute inset-0 pointer-events-auto flex flex-col" style="top: 110px; right: 110px; bottom: 110px; left: 110px;">
+                        <h2 data-i18n="settings" class="text-5xl font-black text-yellow-400 text-center mb-10 drop-shadow-md tracking-widest uppercase">PENGATURAN</h2>
+                        
+                        <div class="flex flex-col gap-8 px-10">
+                            <div class="flex justify-between items-center bg-black/30 p-6 rounded-2xl border-2 border-yellow-700/50">
+                                <span data-i18n="bgm" class="text-4xl font-bold text-white uppercase tracking-wider">BGM</span>
+                                <div class="transform scale-150 origin-right">
+                                    <label class="switch">
+                                        <input type="checkbox" id="toggleBGM" checked onchange="toggleAudioSetting()">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center bg-black/30 p-6 rounded-2xl border-2 border-yellow-700/50">
+                                <span data-i18n="sfx" class="text-4xl font-bold text-white uppercase tracking-wider">SFX</span>
+                                <div class="transform scale-150 origin-right">
+                                    <label class="switch">
+                                        <input type="checkbox" id="toggleSFX" checked onchange="toggleAudioSetting()">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center bg-black/30 p-6 rounded-2xl border-2 border-yellow-700/50">
+                                <span data-i18n="lang" class="text-4xl font-bold text-white uppercase tracking-wider">BAHASA</span>
+                                
+                                <div class="relative w-[250px]" id="langDropdownContainer">
+                                    <div id="langSelectorHeader" class="bg-[#3b2818] text-white border-2 border-yellow-600 py-3 px-4 rounded-xl text-2xl font-bold cursor-pointer text-center uppercase" onclick="toggleLangDropdown()">INDONESIA</div>
+                                    <div id="langDropdown" class="hidden absolute top-[110%] left-0 w-full bg-[#1a1a1a] border-2 border-yellow-600 rounded-xl overflow-hidden z-[100] shadow-xl">
+                                        <div class="p-4 text-white text-xl font-bold hover:bg-yellow-600 cursor-pointer text-center uppercase" onclick="selectLang('id')">INDONESIA</div>
+                                        <div class="p-4 text-white text-xl font-bold hover:bg-yellow-600 cursor-pointer text-center uppercase" onclick="selectLang('en')">ENGLISH</div>
+                                        <div class="p-4 text-white text-xl font-bold hover:bg-yellow-600 cursor-pointer text-center uppercase" onclick="selectLang('mk')">MAKASSAR</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="charScreenLayer" class="screen-overlay hidden z-[55]">
+        <img id="imgCharScreenBgFull" src="" class="absolute inset-0 w-full h-full object-cover opacity-80 z-0">
+        
+        <div class="scaled-group pointer-events-none z-10">
+            <div class="modal-content relative flex items-center">
+                <div class="absolute inset-0 w-full h-full pointer-events-none z-50">
+                    <div id="levelUpEffect" class="absolute hidden flex-col items-center justify-center" style="top: 50%; left: 25%; transform: translate(-50%, -50%); width: 500px; height: 300px;">
+                        <span class="text-7xl text-yellow-300 drop-shadow-[0_0_15px_rgba(255,255,255,1)]">✨</span>
+                        <span class="text-6xl font-black text-white drop-shadow-[0_6px_6px_rgba(0,0,0,1)] italic tracking-wider" style="-webkit-text-stroke: 3px #ea580c;">LEVEL UP!</span>
+                    </div>
+                </div>
+
+                <img id="charScreenDisplay" class="title-character opacity-0" src="" alt="Character Portrait">
+
+                <button onclick="closeCharacterScreen()" class="absolute top-[60px] left-[60px] z-[100] transition transform hover:scale-105 active:scale-95 pointer-events-auto">
+                    <img id="imgCharClose" src="" class="w-20 h-20 drop-shadow-lg">
+                </button>
+
+                <div class="absolute bottom-[40px] left-[450px] transform -translate-x-1/2 flex items-center justify-center gap-6 pointer-events-auto z-50">
+                    <button onclick="animateCharChange(-1)" class="transition-transform hover:scale-105 active:scale-95 w-24 h-24">
+                        <img id="imgBtnPrev" src="" class="w-full h-full object-contain drop-shadow-lg">
+                    </button>
+                    <div class="relative flex items-center justify-center w-[350px] h-[80px]">
+                        <img id="imgPlaceName" src="" class="absolute inset-0 w-full h-full object-fill drop-shadow-lg">
+                        <div id="charNameDisplay" class="relative z-10 text-5xl font-black text-yellow-400 drop-shadow-lg uppercase italic tracking-wider text-center px-4 w-full truncate">BANGGO</div>
+                    </div>
+                    <button onclick="animateCharChange(1)" class="transition-transform hover:scale-105 active:scale-95 w-24 h-24">
+                        <img id="imgBtnNext" src="" class="w-full h-full object-contain drop-shadow-lg">
+                    </button>
+                </div>
+
+                <div class="absolute right-[80px] top-1/2 transform -translate-y-1/2 w-[850px] h-[750px] flex items-center justify-center pointer-events-auto">
+                    <img id="imgCharDetailBg" src="" class="absolute inset-0 w-full h-full object-fill pointer-events-none drop-shadow-2xl">
+                    
+                    <div id="scrollIndTop" class="absolute left-1/2 -translate-x-1/2 top-[95px] floating-triangle-top z-[100] opacity-0 transition-opacity duration-300 pointer-events-none"></div>
+                    <div id="scrollIndBottom" class="absolute left-1/2 -translate-x-1/2 bottom-[95px] floating-triangle-bottom z-[100] opacity-0 transition-opacity duration-300 pointer-events-none"></div>
+
+                    <div id="charDetailScrollWrapper" class="absolute inset-0 scroll-container-left z-20" style="top: 110px; right: 110px; bottom: 110px; left: 110px;">
+                        <div id="charDetailContent" class="flex flex-col scroll-content-left w-full min-h-full pl-6 pr-2 py-2">
+                            <div class="relative w-full flex items-start mb-6 shrink-0">
+                                <img id="charCardThumb" src="" class="w-[100px] h-[140px] object-contain rounded-xl shadow-[0_4px_10px_rgba(0,0,0,0.5)] shrink-0 z-20">
+                                <div class="flex flex-col ml-6 mt-2 flex-grow">
+                                    <div id="charDetailNameDisplay" class="text-4xl font-black text-yellow-400 drop-shadow-md uppercase italic tracking-wider text-left">NAMA</div>
+                                    <div id="charGenderDisplay" class="text-2xl font-bold uppercase tracking-widest text-white drop-shadow-md text-left mt-1">WANITA</div>
+                                </div>
+                                <div id="charRarityDisplay" class="absolute top-0 right-0 text-2xl font-black uppercase tracking-widest drop-shadow-md text-right">Normal (N)</div>
+                            </div>
+                            
+                            <div class="w-full h-1 bg-yellow-600/50 rounded mb-6 shrink-0"></div>
+                            <div id="charLoreDisplay" class="text-xl font-medium mb-10 leading-relaxed text-white drop-shadow-md text-left shrink-0">Narasi latar belakang.</div>
+                            
+                            <div id="charSkillBox" class="bg-[#0f172a]/80 border-4 border-blue-900 rounded-3xl p-8 mb-8 flex flex-col gap-2 shrink-0">
+                                <div id="charSkillTitle" class="text-blue-300 font-bold text-2xl uppercase tracking-widest"></div>
+                                <div id="charSkillDesc" class="text-xl text-blue-100 leading-relaxed whitespace-pre-wrap"></div>
+                            </div>
+
+                            <div class="flex-grow shrink-0"></div>
+                            <div id="charLockedMsg" data-i18n="locked" class="text-red-400 text-3xl font-bold text-center mt-4 mb-6 hidden shrink-0">LOCKED - DAPATKAN DI DRAW!</div>
+                            
+                            <div class="flex gap-6 w-full shrink-0 mt-4 mb-4">
+                                <button id="btnUpgradeChar" onclick="upgradePreviewedChar()" class="btn-equip flex-1 !bg-gradient-to-b !from-yellow-400 !to-yellow-600 !shadow-[0_8px_0_#b45309] !text-[#422006] hover:scale-105 active:scale-95 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 hidden !text-2xl !py-5">UPGRADE</button>
+                                <button id="btnEquipChar" onclick="equipPreviewedChar()" class="btn-equip btn-equip-main flex-1 hover:scale-105 active:scale-95 transition-transform disabled:hover:scale-100 hidden !text-2xl !py-5">EQUIPPED</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="dailyLayer" class="screen-overlay hidden z-[60]">
+        <div class="scaled-group">
+            <div class="modal-content relative flex items-center justify-center">
+                <div class="relative w-[1300px] h-[800px] flex justify-center mt-12">
+                    <img id="imgDailyBg" src="" class="absolute inset-0 w-full h-full object-contain pointer-events-none drop-shadow-2xl">
+                    <button onclick="hideDailyLogin()" class="absolute top-[20px] left-[15px] z-50 transition transform hover:scale-105 active:scale-95 pointer-events-auto">
+                        <img id="imgDailyClose" src="" class="w-20 h-20 drop-shadow-lg">
+                    </button>
+                    <div class="absolute inset-0 flex pt-[200px] pb-[130px] px-[120px] gap-8 z-10 pointer-events-auto">
+                        <div id="dailyGridLeft" class="grid grid-cols-3 gap-x-6 gap-y-4 w-[65%] h-full"></div>
+                        <div id="dailyGridRight" class="w-[35%] h-full"></div>
+                    </div>
+                    <button id="btnClaimDaily" onclick="claimDaily()" class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 w-[380px] h-[90px] rounded-[45px] font-black text-4xl uppercase tracking-wider z-50 pointer-events-auto transition-all"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="leaderboardLayer" class="screen-overlay hidden z-[55]">
+        <div class="scaled-group">
+            <div class="modal-content relative flex items-center justify-center">
+                <div class="lb-container">
+                    <img id="imgLbBg" src="" class="absolute inset-0 w-full h-full object-fill pointer-events-none drop-shadow-2xl">
+                    <button onclick="hideLeaderboard()" class="absolute top-[30px] left-[40px] z-[100] transition transform hover:scale-105 active:scale-95 pointer-events-auto">
+                        <img id="imgLbClose" src="" class="w-20 h-20 drop-shadow-lg">
+                    </button>
+                    
+                    <div class="absolute inset-0 pointer-events-auto flex flex-col items-center" style="top: 130px; right: 90px; bottom: 90px; left: 90px;">
+                        <div class="lb-table-wrapper">
+                            <table class="lb-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 15%" data-i18n="rank">RANK</th>
+                                        <th style="width: 45%" data-i18n="name">NAME</th>
+                                        <th style="width: 20%" data-i18n="score">SCORE</th>
+                                        <th style="width: 20%" data-i18n="accuracy">ACCURACY</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lb-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="gachaLayer" class="screen-overlay hidden z-[60]">
+        <div class="scaled-group">
+            <div class="modal-content relative flex items-center justify-center">
+                <div class="relative w-[1920px] h-[1080px] flex justify-center items-center">
+                    <img id="imgDrawBg" src="" class="absolute inset-0 w-full h-full object-contain pointer-events-none drop-shadow-2xl">
+                    <button onclick="hideGacha()" class="absolute top-[78px] left-[105px] z-[100] transition transform hover:scale-105 active:scale-95 pointer-events-auto">
+                        <img id="imgGachaClose" src="" class="w-20 h-20 drop-shadow-lg">
+                    </button>
+                    <div id="gachaResultBox" class="absolute top-[296px] bottom-[334px] left-[426px] right-[426px] flex items-center justify-center text-center flex-col z-10 pointer-events-none">
+                        <span class="text-pink-400 text-8xl font-black drop-shadow-lg">❓</span>
+                    </div>
+                    <div class="absolute top-[831px] left-1/2 transform -translate-x-1/2 z-50 pointer-events-auto">
+                        <button id="btnDrawAction" onclick="pullGacha()" class="play-btn-main play-btn-yellow !relative !left-auto !top-auto !w-[450px] !h-[110px] !text-5xl !bg-gradient-to-b !from-pink-500 !to-pink-700 !shadow-[0_8px_0_#831843] transition-all">DRAW (100 🪙)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="pauseLayer" class="screen-overlay hidden z-[100]">
+        <div class="scaled-group">
+            <div class="modal-content relative flex items-center justify-center">
+                <div class="relative w-[900px] h-[525px] flex justify-center items-center">
+                    <img id="imgPauseBg" src="" class="absolute inset-0 w-full h-full object-fill pointer-events-none drop-shadow-2xl">
+                    <div class="absolute inset-0 pointer-events-auto flex flex-col items-center justify-center gap-10 p-12">
+                        <h2 class="text-5xl font-black text-white text-center drop-shadow-md uppercase italic tracking-wider">GAME PAUSED</h2>
+                        <div class="flex gap-8 w-full px-12">
+                            <button onclick="quitToMenu()" data-i18n="menu" class="btn-green-small flex-1 !text-3xl !py-5 !bg-gradient-to-b !from-red-500 !to-red-700 !shadow-[0_8px_0_#991b1b]">MENU</button>
+                            <button onclick="resumeGame()" class="btn-green-small flex-1 !text-3xl !py-5 !bg-gradient-to-b !from-blue-500 !to-blue-700 !shadow-[0_8px_0_#1e3a8a]">LANJUT</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="countdownLayer" class="hidden">
+        <div id="countdownGroup" class="scaled-group">
+            <div id="countdownText" class="countdown-text">3</div>
+        </div>
+    </div>
+
+    <div id="hud" class="ui-layer hidden">
+        <div id="hudTimerGroup" class="absolute top-4 left-4 pointer-events-none z-50 origin-top-left transition-transform">
+            <div style="position: relative; display: inline-block;">
+                <img id="imgModalTimer" src="" style="display: block; width: auto; height: auto;">
+                <button onclick="pauseGame()" id="btn-pause-hud" class="fade-in-btn absolute pointer-events-auto transition-transform active:scale-95" style="top: 21px; left: 35px; border: none; background: transparent; padding: 0; outline: none; cursor: pointer;">
+                    <img id="imgBtnPause" src="">
+                </button>
+                <div class="absolute flex items-center justify-center" style="top: 71px; left: 175px; right: 47px; bottom: 37px;">
+                    <span id="timeVal" class="text-white font-black text-[3rem] drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] leading-none text-center w-full">60</span>
+                </div>
+            </div>
+            <div id="frenzyTimeAdd" class="frenzy-time-add" data-i18n="add2Sec">+2 Detik</div>
+        </div>
+
+        <div id="hudScoreGroup" class="absolute top-4 right-4 pointer-events-none z-50 origin-top-right transition-transform">
+            <div style="position: relative; display: inline-block;">
+                <img id="imgModalScore" src="" style="display: block; width: auto; height: auto;">
+                <div class="absolute flex items-center justify-center" style="top: 71px; left: 47px; right: 175px; bottom: 37px;">
+                    <span id="scoreVal" class="text-[#facc15] font-black text-[3rem] drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] leading-none text-center w-full">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="message-container"></div>
+        <div id="gameplayTypeLabel" class="gameplay-type-label">FRENZY RUSH</div>
+        <div id="sniperAmmoHUD" class="sniper-ammo-container hidden"></div>
+    </div>
+
+    <div id="endScreen" class="screen-overlay hidden z-[70] !bg-transparent !backdrop-blur-none">
+        <div id="endGroup" class="scaled-group">
+            <div class="relative w-[1920px] h-[1080px] flex justify-center items-center">
+                <div class="absolute inset-0 z-0 pointer-events-none flex justify-center items-center">
+                    <img id="imgGameoverBg" src="" class="w-full h-full object-contain drop-shadow-2xl">
+                </div>
+                
+                <div class="absolute pointer-events-auto z-10" style="top: 199px; right: 343px; bottom: 199px; left: 343px;">
+                    <div class="absolute top-[40px] w-full flex flex-col items-center">
+                        <span data-i18n="totalScore" class="text-4xl font-black text-white tracking-widest drop-shadow-md uppercase">TOTAL SCORE</span>
+                        <span id="finalScore" class="text-[8rem] font-black text-[#facc15] drop-shadow-[0_8px_10px_rgba(0,0,0,0.5)] leading-none mt-4">0</span>
+                    </div>
+
+                    <div id="wrapper-btn-menu" class="absolute top-[180px] z-10 btn-start-center">
+                        <button id="btn-menu-end" data-i18n="menu" onclick="handleBtnAction('btn-menu-end', backToMenu)" class="end-btn-menu">MENU</button>
+                    </div>
+                    
+                    <div id="wrapper-btn-replay" class="absolute top-[180px] z-10 btn-start-center">
+                        <button id="btn-replay-end" data-i18n="playAgain" onclick="handleBtnAction('btn-replay-end', startCountdownGame)" class="end-btn-replay">PLAY\nAGAIN</button>
+                    </div>
+
+                    <div class="absolute bottom-[160px] left-1/2 -translate-x-1/2 flex gap-4 w-[450px]">
+                        <div class="flex-1 bg-[#1f2937]/90 h-[70px] rounded-[20px] flex flex-col items-center justify-center shadow-inner">
+                            <span data-i18n="accuracy" class="text-[0.7rem] text-gray-400 font-bold tracking-widest uppercase">ACCURACY</span>
+                            <span id="finalAccuracy" class="text-[#60a5fa] font-black text-2xl">0%</span>
+                        </div>
+                        <div class="flex-1 h-[70px] bg-[#1f2937]/90 rounded-[20px] shadow-inner flex items-center justify-center border-2 border-[#374151]">
+                            <span id="submitStatusText" class="text-[#9ca3af] font-black text-xl uppercase tracking-widest text-center px-4 w-full">MENYIMPAN...</span>
+                        </div>
+                    </div>
+
+                    <div id="starsContainer" class="absolute bottom-[20px] left-1/2 -translate-x-1/2 flex gap-4 items-center justify-center h-[120px]"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data/i18n.js"></script>
+    <script src="js/data/characters.js"></script>
+    <script src="js/engine/entities.js"></script>
+    <script src="js/engine/game.js"></script>
+    <script src="js/ui/menus.js"></script>
+    <script src="js/ui/hud.js"></script>
+    <script src="js/utils/audio.js"></script>
+    <script src="js/utils/api.js"></script>
+
+</body>
+</html>
