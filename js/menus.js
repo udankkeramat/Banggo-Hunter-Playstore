@@ -145,3 +145,48 @@ function toggleLangDropdown() {
     const drop = document.getElementById('langDropdown');
     drop.classList.toggle('hidden');
 }
+
+// ==========================================
+// TAMBAHAN DARI SERA: MESIN PEMANAS (BOOTING)
+// ==========================================
+
+function initGameIntro() {
+    // 1. Hilangkan layar hitam logo 'Back Sleep' setelah 4.5 detik
+    setTimeout(() => {
+        const splash = document.getElementById('customSplashScreen');
+        if(splash) {
+            splash.style.opacity = '0';
+            splash.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => splash.style.display = 'none', 500); // Hilang total dari layar
+        }
+
+        // 2. Mulai jalankan animasi bar loading
+        simulateLoading();
+    }, 4500); 
+}
+
+function simulateLoading() {
+    let progress = 0;
+    const barFill = document.getElementById('loadingBarFill');
+    const loadingGroup = document.getElementById('loadingGroup');
+    const startGroup = document.getElementById('startGroup');
+
+    let interval = setInterval(() => {
+        progress += Math.random() * 20; // Loading nambah secara acak biar natural
+        if (progress >= 100) progress = 100;
+
+        if (barFill) barFill.style.width = progress + '%';
+
+        // Kalau loading udah penuh (100%)
+        if (progress === 100) {
+            clearInterval(interval);
+            setTimeout(() => {
+                loadingGroup.classList.add('hidden'); // Sembunyikan bar loading
+                startGroup.classList.remove('hidden'); // Munculkan tombol "SENTUH UNTUK MULAI"
+            }, 600);
+        }
+    }, 400); // Update loading setiap 0.4 detik
+}
+
+// Langsung jalankan mesinnya saat game dibuka!
+initGameIntro();
