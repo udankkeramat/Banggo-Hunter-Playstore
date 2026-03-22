@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -38,15 +38,15 @@
     <div id="topNotifContainer" class="absolute top-4 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 z-[9999] pointer-events-none"></div>
 
     <div id="titleLayer" class="absolute top-0 left-0 w-full h-full z-50 overflow-hidden hidden">
-        <img id="titleBgTree" class="title-bg-tree pointer-events-none" src="" alt="Tree BG">
+        <img id="titleBgTree" class="title-bg-tree pointer-events-none" src="assets/images/title_bg_tree.png" alt="Tree BG">
         
         <div class="scaled-group pointer-events-none">
             <div id="uiLeftWrapper" class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-0">
-                <img id="titleChar" class="title-character pointer-events-auto" src="" alt="Character">
+                <img id="titleChar" class="title-character pointer-events-auto" src="assets/images/banggo.png" alt="Character">
             </div>
             
             <div id="uiRightWrapper" class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-0">
-                <img id="titleLogo" class="title-logo pointer-events-auto" src="" alt="Banggo Hunter Logo">
+                <img id="titleLogo" class="title-logo pointer-events-auto" src="assets/images/title_logo.png" alt="Banggo Hunter Logo">
                 <div class="mode-container pointer-events-auto">
                     <button id="btn-classic" class="mode-btn active" data-i18n="classic" onclick="setGameMode('classic')">CLASSIC</button>
                     <button id="btn-rank" class="mode-btn" data-i18n="rank" onclick="setGameMode('rank')">RANK</button>
@@ -61,7 +61,7 @@
                         <span id="uiBanggoCoin" class="text-yellow-400 font-black text-3xl">0</span>
                     </div>
                     <div class="glass-panel px-6 py-3 rounded-2xl border-4 border-orange-400 flex items-center gap-3 w-[220px] justify-between bg-black/70 shadow-[0_0_15px_rgba(251,146,60,0.5)]">
-                        <img id="uiFeatherIcon" src="" class="w-8 h-8 object-contain drop-shadow-md">
+                        <img id="uiFeatherIcon" src="assets/images/icon_feather.png" class="w-8 h-8 object-contain drop-shadow-md">
                         <span id="uiBanggoFeather" class="text-orange-400 font-black text-3xl">0</span>
                     </div>
                 </div>
@@ -83,10 +83,10 @@
 
                     <div class="flex flex-col gap-6 items-start">
                         <button id="btn-setting" class="transition-transform hover:scale-105 active:scale-95 flex items-center justify-center w-[64px] h-[64px]" onclick="handleBtnAction('btn-setting', showSetting)">
-                            <img id="imgBtnSetting" src="" alt="Setting" class="w-full h-full object-contain drop-shadow-lg">
+                            <img id="imgBtnSetting" src="assets/images/btn_setting.png" alt="Setting" class="w-full h-full object-contain drop-shadow-lg">
                         </button>
                         <button id="btn-exit" class="transition-transform hover:scale-105 active:scale-95 flex items-center justify-center w-[64px] h-[64px]" onclick="handleBtnAction('btn-exit', confirmExitApp)">
-                            <img id="imgBtnExit" src="" alt="Exit" class="w-full h-full object-contain drop-shadow-lg">
+                            <img id="imgBtnExit" src="assets/images/btn_exit.png" alt="Exit" class="w-full h-full object-contain drop-shadow-lg">
                         </button>
                     </div>
                 </div>
@@ -99,13 +99,13 @@
                     <button id="btn-gacha" class="btn-green-small" data-i18n="draw" onclick="handleBtnAction('btn-gacha', showGacha)">DRAW</button>
                     <button id="btn-hunter" class="btn-green-small" data-i18n="hunter" onclick="handleBtnAction('btn-hunter', showCharacterScreen)">HUNTER</button>
                 </div>
-                <img id="studioLogo" class="studio-logo pointer-events-auto" src="" alt="Studio Logo">
+                <img id="studioLogo" class="studio-logo pointer-events-auto" src="assets/images/studio_logo.png" alt="Studio Logo">
             </div>
         </div>
     </div>
 
     <div id="gameplaySelectionLayer" class="screen-overlay hidden z-[60] !bg-transparent !backdrop-blur-none">
-        <img id="imgGameplayBg" src="" class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none">
+        <img id="imgGameplayBg" src="assets/images/bg_modal.png" class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none">
         <div class="scaled-group z-10">
             <div class="modal-content relative flex items-center justify-center flex-col gap-10">
                 <h2 id="gsTitle" class="text-6xl font-black text-white drop-shadow-md tracking-widest uppercase italic mb-4">MODE</h2>
@@ -123,7 +123,7 @@
         <div class="scaled-group">
             <div class="modal-content relative flex items-center justify-center">
                 <div class="relative w-[1000px] h-[600px] flex justify-center items-center">
-                    <img id="imgDisconnectBg" src="" class="absolute inset-0 w-full h-full object-fill pointer-events-none drop-shadow-2xl">
+                    <img id="imgDisconnectBg" src="assets/images/bg_modal.png" class="absolute inset-0 w-full h-full object-fill pointer-events-none drop-shadow-2xl">
                     <div class="absolute inset-0 pointer-events-auto flex flex-col items-center justify-center gap-10 p-12 text-center">
                         <span class="text-7xl mb-4">📡</span>
                         <h2 data-i18n="connLost" class="text-4xl font-black text-red-400 drop-shadow-md uppercase tracking-wider whitespace-pre-wrap leading-snug">SINYAL HILANG, SAYANG!\nMenunggu koneksi...</h2>
@@ -141,7 +141,7 @@
         <div class="scaled-group">
             <div class="modal-content relative flex items-center justify-center">
                 <div class="relative w-[900px] h-[525px] flex justify-center items-center">
-                    <img id="imgExitBg" src="" class="absolute inset-0 w-full h-full object-fill pointer-events-none drop-shadow-2xl">
+                    <img id="imgExitBg" src="assets/images/bg_modal.png" class="absolute inset-0 w-full h-full object-fill pointer-events-none drop-shadow-2xl">
                     <div class="absolute inset-0 pointer-events-auto flex flex-col items-center justify-center gap-10 p-12">
                         <h2 data-i18n="exitConfirm" class="text-5xl font-black text-white text-center drop-shadow-md">KELUAR DARI GAME?</h2>
                         <div class="flex gap-8 w-full px-12">
@@ -158,7 +158,7 @@
         <div class="scaled-group">
             <div class="modal-content relative flex items-center justify-center">
                 <div class="relative w-[900px] h-[650px] flex justify-center items-center">
-                    <img id="imgPhotoConfirmBg" src="" class="absolute inset-0 w-full h-full object-fill pointer-events-none drop-shadow-2xl">
+                    <img id="imgPhotoConfirmBg" src="assets/images/bg_modal.png" class="absolute inset-0 w-full h-full object-fill pointer-events-none drop-shadow-2xl">
                     <div class="absolute inset-0 pointer-events-auto flex flex-col items-center justify-center gap-8 p-12">
                         <h2 data-i18n="savePhotoConfirm" class="text-4xl font-black text-yellow-400 text-center drop-shadow-md uppercase tracking-widest">SIMPAN FOTO INI?</h2>
                         <div class="w-[200px] h-[200px] rounded-3xl border-8 border-yellow-400 bg-black/70 overflow-hidden shadow-[0_0_20px_rgba(250,204,21,0.6)]">
@@ -178,9 +178,9 @@
         <div class="scaled-group">
             <div class="modal-content relative flex items-center justify-center">
                 <div class="relative w-[1000px] h-[750px] flex justify-center items-center">
-                    <img id="imgSettingBg" src="" class="absolute inset-0 w-full h-full object-fill pointer-events-none drop-shadow-2xl">
+                    <img id="imgSettingBg" src="assets/images/bg_modal.png" class="absolute inset-0 w-full h-full object-fill pointer-events-none drop-shadow-2xl">
                     <button onclick="hideSetting()" class="absolute top-[40px] left-[40px] z-[100] transition transform hover:scale-105 active:scale-95 pointer-events-auto">
-                        <img id="imgSettingClose" src="" class="w-20 h-20 drop-shadow-lg">
+                        <img id="imgSettingClose" src="assets/images/btn_close.png" class="w-20 h-20 drop-shadow-lg">
                     </button>
                     
                     <div class="absolute inset-0 pointer-events-auto flex flex-col" style="top: 110px; right: 110px; bottom: 110px; left: 110px;">
@@ -225,7 +225,7 @@
     </div>
 
     <div id="charScreenLayer" class="screen-overlay hidden z-[55]">
-        <img id="imgCharScreenBgFull" src="" class="absolute inset-0 w-full h-full object-cover opacity-80 z-0">
+        <img id="imgCharScreenBgFull" src="assets/images/bg_char_screen.png" class="absolute inset-0 w-full h-full object-cover opacity-80 z-0">
         
         <div class="scaled-group pointer-events-none z-10">
             <div class="modal-content relative flex items-center">
@@ -239,24 +239,24 @@
                 <img id="charScreenDisplay" class="title-character opacity-0" src="" alt="Character Portrait">
 
                 <button onclick="closeCharacterScreen()" class="absolute top-[60px] left-[60px] z-[100] transition transform hover:scale-105 active:scale-95 pointer-events-auto">
-                    <img id="imgCharClose" src="" class="w-20 h-20 drop-shadow-lg">
+                    <img id="imgCharClose" src="assets/images/btn_close.png" class="w-20 h-20 drop-shadow-lg">
                 </button>
 
                 <div class="absolute bottom-[40px] left-[450px] transform -translate-x-1/2 flex items-center justify-center gap-6 pointer-events-auto z-50">
                     <button onclick="animateCharChange(-1)" class="transition-transform hover:scale-105 active:scale-95 w-24 h-24">
-                        <img id="imgBtnPrev" src="" class="w-full h-full object-contain drop-shadow-lg">
+                        <img id="imgBtnPrev" src="assets/images/btn_prev.png" class="w-full h-full object-contain drop-shadow-lg">
                     </button>
                     <div class="relative flex items-center justify-center w-[350px] h-[80px]">
-                        <img id="imgPlaceName" src="" class="absolute inset-0 w-full h-full object-fill drop-shadow-lg">
+                        <img id="imgPlaceName" src="assets/images/bg_nameplate.png" class="absolute inset-0 w-full h-full object-fill drop-shadow-lg">
                         <div id="charNameDisplay" class="relative z-10 text-5xl font-black text-yellow-400 drop-shadow-lg uppercase italic tracking-wider text-center px-4 w-full truncate">BANGGO</div>
                     </div>
                     <button onclick="animateCharChange(1)" class="transition-transform hover:scale-105 active:scale-95 w-24 h-24">
-                        <img id="imgBtnNext" src="" class="w-full h-full object-contain drop-shadow-lg">
+                        <img id="imgBtnNext" src="assets/images/btn_next.png" class="w-full h-full object-contain drop-shadow-lg">
                     </button>
                 </div>
 
                 <div class="absolute right-[80px] top-1/2 transform -translate-y-1/2 w-[850px] h-[750px] flex items-center justify-center pointer-events-auto">
-                    <img id="imgCharDetailBg" src="" class="absolute inset-0 w-full h-full object-fill pointer-events-none drop-shadow-2xl">
+                    <img id="imgCharDetailBg" src="assets/images/bg_modal.png" class="absolute inset-0 w-full h-full object-fill pointer-events-none drop-shadow-2xl">
                     
                     <div id="scrollIndTop" class="absolute left-1/2 -translate-x-1/2 top-[95px] floating-triangle-top z-[100] opacity-0 transition-opacity duration-300 pointer-events-none"></div>
                     <div id="scrollIndBottom" class="absolute left-1/2 -translate-x-1/2 bottom-[95px] floating-triangle-bottom z-[100] opacity-0 transition-opacity duration-300 pointer-events-none"></div>
@@ -298,9 +298,9 @@
         <div class="scaled-group">
             <div class="modal-content relative flex items-center justify-center">
                 <div class="relative w-[1300px] h-[800px] flex justify-center mt-12">
-                    <img id="imgDailyBg" src="" class="absolute inset-0 w-full h-full object-contain pointer-events-none drop-shadow-2xl">
+                    <img id="imgDailyBg" src="assets/images/bg_modal.png" class="absolute inset-0 w-full h-full object-contain pointer-events-none drop-shadow-2xl">
                     <button onclick="hideDailyLogin()" class="absolute top-[20px] left-[15px] z-50 transition transform hover:scale-105 active:scale-95 pointer-events-auto">
-                        <img id="imgDailyClose" src="" class="w-20 h-20 drop-shadow-lg">
+                        <img id="imgDailyClose" src="assets/images/btn_close.png" class="w-20 h-20 drop-shadow-lg">
                     </button>
                     <div class="absolute inset-0 flex pt-[200px] pb-[130px] px-[120px] gap-8 z-10 pointer-events-auto">
                         <div id="dailyGridLeft" class="grid grid-cols-3 gap-x-6 gap-y-4 w-[65%] h-full"></div>
@@ -316,9 +316,9 @@
         <div class="scaled-group">
             <div class="modal-content relative flex items-center justify-center">
                 <div class="lb-container">
-                    <img id="imgLbBg" src="" class="absolute inset-0 w-full h-full object-fill pointer-events-none drop-shadow-2xl">
+                    <img id="imgLbBg" src="assets/images/bg_modal.png" class="absolute inset-0 w-full h-full object-fill pointer-events-none drop-shadow-2xl">
                     <button onclick="hideLeaderboard()" class="absolute top-[30px] left-[40px] z-[100] transition transform hover:scale-105 active:scale-95 pointer-events-auto">
-                        <img id="imgLbClose" src="" class="w-20 h-20 drop-shadow-lg">
+                        <img id="imgLbClose" src="assets/images/btn_close.png" class="w-20 h-20 drop-shadow-lg">
                     </button>
                     
                     <div class="absolute inset-0 pointer-events-auto flex flex-col items-center" style="top: 130px; right: 90px; bottom: 90px; left: 90px;">
@@ -345,9 +345,9 @@
         <div class="scaled-group">
             <div class="modal-content relative flex items-center justify-center">
                 <div class="relative w-[1920px] h-[1080px] flex justify-center items-center">
-                    <img id="imgDrawBg" src="" class="absolute inset-0 w-full h-full object-contain pointer-events-none drop-shadow-2xl">
+                    <img id="imgDrawBg" src="assets/images/bg_modal.png" class="absolute inset-0 w-full h-full object-contain pointer-events-none drop-shadow-2xl">
                     <button onclick="hideGacha()" class="absolute top-[78px] left-[105px] z-[100] transition transform hover:scale-105 active:scale-95 pointer-events-auto">
-                        <img id="imgGachaClose" src="" class="w-20 h-20 drop-shadow-lg">
+                        <img id="imgGachaClose" src="assets/images/btn_close.png" class="w-20 h-20 drop-shadow-lg">
                     </button>
                     <div id="gachaResultBox" class="absolute top-[296px] bottom-[334px] left-[426px] right-[426px] flex items-center justify-center text-center flex-col z-10 pointer-events-none">
                         <span class="text-pink-400 text-8xl font-black drop-shadow-lg">❓</span>
@@ -364,7 +364,7 @@
         <div class="scaled-group">
             <div class="modal-content relative flex items-center justify-center">
                 <div class="relative w-[900px] h-[525px] flex justify-center items-center">
-                    <img id="imgPauseBg" src="" class="absolute inset-0 w-full h-full object-fill pointer-events-none drop-shadow-2xl">
+                    <img id="imgPauseBg" src="assets/images/bg_modal.png" class="absolute inset-0 w-full h-full object-fill pointer-events-none drop-shadow-2xl">
                     <div class="absolute inset-0 pointer-events-auto flex flex-col items-center justify-center gap-10 p-12">
                         <h2 class="text-5xl font-black text-white text-center drop-shadow-md uppercase italic tracking-wider">GAME PAUSED</h2>
                         <div class="flex gap-8 w-full px-12">
@@ -386,9 +386,9 @@
     <div id="hud" class="ui-layer hidden">
         <div id="hudTimerGroup" class="absolute top-4 left-4 pointer-events-none z-50 origin-top-left transition-transform">
             <div style="position: relative; display: inline-block;">
-                <img id="imgModalTimer" src="" style="display: block; width: auto; height: auto;">
+                <img id="imgModalTimer" src="assets/images/hud_timer.png" style="display: block; width: auto; height: auto;">
                 <button onclick="pauseGame()" id="btn-pause-hud" class="fade-in-btn absolute pointer-events-auto transition-transform active:scale-95" style="top: 21px; left: 35px; border: none; background: transparent; padding: 0; outline: none; cursor: pointer;">
-                    <img id="imgBtnPause" src="">
+                    <img id="imgBtnPause" src="assets/images/btn_pause.png">
                 </button>
                 <div class="absolute flex items-center justify-center" style="top: 71px; left: 175px; right: 47px; bottom: 37px;">
                     <span id="timeVal" class="text-white font-black text-[3rem] drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] leading-none text-center w-full">60</span>
@@ -399,7 +399,7 @@
 
         <div id="hudScoreGroup" class="absolute top-4 right-4 pointer-events-none z-50 origin-top-right transition-transform">
             <div style="position: relative; display: inline-block;">
-                <img id="imgModalScore" src="" style="display: block; width: auto; height: auto;">
+                <img id="imgModalScore" src="assets/images/hud_score.png" style="display: block; width: auto; height: auto;">
                 <div class="absolute flex items-center justify-center" style="top: 71px; left: 47px; right: 175px; bottom: 37px;">
                     <span id="scoreVal" class="text-[#facc15] font-black text-[3rem] drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] leading-none text-center w-full">0</span>
                 </div>
@@ -415,7 +415,7 @@
         <div id="endGroup" class="scaled-group">
             <div class="relative w-[1920px] h-[1080px] flex justify-center items-center">
                 <div class="absolute inset-0 z-0 pointer-events-none flex justify-center items-center">
-                    <img id="imgGameoverBg" src="" class="w-full h-full object-contain drop-shadow-2xl">
+                    <img id="imgGameoverBg" src="assets/images/bg_modal.png" class="w-full h-full object-contain drop-shadow-2xl">
                 </div>
                 
                 <div class="absolute pointer-events-auto z-10" style="top: 199px; right: 343px; bottom: 199px; left: 343px;">
@@ -458,4 +458,4 @@
     <script src="js/api.js"></script>
 
 </body>
-</html> 
+</html>
